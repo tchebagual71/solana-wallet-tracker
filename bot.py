@@ -20,7 +20,7 @@ HELIUS_WEBHOOK_ID = '5d8cadd0-ce36-4cb9-8cbc-6dc3d21705f'
 ADDING_WALLET, DELETING_WALLET = range(2)
 client = MongoClient(MONGODB_URI)
 db = client.sol_wallets
-wallets_collection = db.wallets_test
+wallets_collection = db.wallets
 
 # Set up logging
 logging.basicConfig(
