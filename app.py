@@ -181,6 +181,10 @@ def create_message(data):
 # Launch with Flask
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return 'Welcome to the Solana Wallet Tracker!', 200
+
 @app.route('/wallet', methods=['POST'])
 def handle_webhook():
     # Extract data from incoming request
@@ -212,4 +216,4 @@ def handle_webhook():
     return 'OK'
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5002)
+    app.run(debug=False, host='0.0.0.0', port=5002)
