@@ -29,7 +29,7 @@ wallets_collection = db.wallets_test
 
 def get_webhook(HELIUS_WEBHOOK_ID):
     # Get current webhook from Helius. We can use one webhook to track all addresse
-    url = f"https://api.helius.xyz/v0/webhooks/{HELIUS_WEBHOOK_ID}?api-key={HELIUS_KEY}"
+    url = f"https://api-devnet.helius.xyz/v0/webhooks/{HELIUS_WEBHOOK_ID}?api-key={HELIUS_KEY}"
     r = requests.get(url)
     if r.status_code == 200:
         return True, r.json()['webhookID'], r.json()['accountAddresses']
@@ -39,7 +39,7 @@ def get_webhook(HELIUS_WEBHOOK_ID):
 
 def add_webhook(user_id, user_wallet, webhook_id, addresses):
     # Update current webhook from Helius by adding the new address
-    url = f"https://api.helius.xyz/v0/webhooks/{webhook_id}?api-key={HELIUS_KEY}"
+    url = f"https://api-devnet.helius.xyz/v0/webhooks/{webhook_id}?api-key={HELIUS_KEY}"
     if user_wallet in addresses:
         logging.info('existing wallet, returning true')
         return True
@@ -58,7 +58,7 @@ def add_webhook(user_id, user_wallet, webhook_id, addresses):
 
 def delete_webhook(user_id, user_wallet, webhook_id, addresses):
     # Delete this address from the current webhook from Helius
-    url = f"https://api.helius.xyz/v0/webhooks/{webhook_id}?api-key={HELIUS_KEY}"
+    url = f"https://api-devnet.helius.xyz/v0/webhooks/{webhook_id}?api-key={HELIUS_KEY}"
     if user_wallet not in addresses:
         return True
     addresses.remove(user_wallet)
@@ -99,7 +99,7 @@ def check_wallet_transactions(wallet):
     # Check # transaction per day for this wallet
     # If fails - return True
     try:
-        url = f'https://api.helius.xyz/v0/addresses/{wallet}/raw-transactions?api-key={HELIUS_KEY}'
+        url = f'https://api-devnet.helius.xyz/v0/addresses/{wallet}/raw-transactions?api-key={HELIUS_KEY}'
         r = requests.get(url)
         j = r.json()
         if len(j) < 10:
