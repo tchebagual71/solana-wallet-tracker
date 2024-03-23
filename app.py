@@ -1,4 +1,6 @@
 from flask import Flask, request
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
 # Telegram Bot was created using ChatGPT, so it uses an older library (python-telegram-bot==13.7)
 from telegram import Bot
@@ -24,7 +26,10 @@ HELIUS_WEBHOOK_URL = os.getenv('HELIUS_WEBHOOK_URL')
 HELIUS_WEBHOOK_ID = os.getenv('HELIUS_WEBHOOK_ID')
 
 
-client = MongoClient(MONGODB_URI)
+client = MongoClient(MONGODB_URI, server_api=ServerApi('1'))
+
+
+
 db = client.sol_wallets
 wallets_collection = db.wallets
 
@@ -35,6 +40,12 @@ logging.basicConfig(
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
 
 def send_message_to_user(bot_token, user_id, message):
     # Use telegram library to send text message
