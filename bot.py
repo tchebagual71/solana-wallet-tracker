@@ -23,7 +23,7 @@ HELIUS_WEBHOOK_ID = os.getenv('HELIUS_WEBHOOK_ID')
 ADDING_WALLET, DELETING_WALLET = range(2)
 client = MongoClient(MONGODB_URI)
 db = client.sol_wallets
-wallets_collection = db.wallets_test
+wallets_collection = db.wallets
 
 # Set up logging
 logging.basicConfig(
