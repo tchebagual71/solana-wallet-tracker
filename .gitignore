@@ -4,5 +4,6 @@ venv/
 bot.log
 wallet.log
 .DS_Store
+/keys.txt
 keys.txt
 example.txt

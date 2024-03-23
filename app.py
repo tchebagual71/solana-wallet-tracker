@@ -100,7 +100,7 @@ def check_image(data):
     # NFTs and pNFTs
     if len(token_mint) > 0:
         # Get NFT metadata from Helius
-        url = f"https://api-devnet.helius.xyz/v0/token-metadata?api-key={HELIUS_KEY}"
+        url = f"https://api.helius.xyz/v0/token-metadata?api-key={HELIUS_KEY}"
         nft_addresses = [token_mint]
         r_data = {
             "mintAccounts": nft_addresses,
