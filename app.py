@@ -26,7 +26,7 @@ HELIUS_WEBHOOK_URL = os.getenv('HELIUS_WEBHOOK_URL')
 HELIUS_WEBHOOK_ID = os.getenv('HELIUS_WEBHOOK_ID')
 
 
-client = MongoClient(MONGODB_URI, server_api=ServerApi('1'))
+client = MongoClient(config.MONGODB_URI, server_api=ServerApi('1'))
 
 
 
@@ -88,7 +88,7 @@ def format_wallet_address(match_obj):
 
 def get_compressed_image(asset_id):
     # Use RPC to get infor for compressed NFTs
-    url = f'https://rpc.helius.xyz/?api-key={HELIUS_KEY}'
+    url = f'https://rpc.helius.xyz/?api-key={config.HELIUS_KEY}'
     r_data = {
         "jsonrpc": "2.0",
         "id": "my-id",
@@ -111,7 +111,7 @@ def check_image(data):
     # NFTs and pNFTs
     if len(token_mint) > 0:
         # Get NFT metadata from Helius
-        url = f"https://api.helius.xyz/v0/token-metadata?api-key={HELIUS_KEY}"
+        url = f"https://api.helius.xyz/v0/token-metadata?api-key={config.HELIUS_KEY}"
         nft_addresses = [token_mint]
         r_data = {
             "mintAccounts": nft_addresses,
@@ -217,12 +217,12 @@ def handle_webhook():
 
         if len(message['image']) > 0:
             try:
-                send_image_to_user(BOT_TOKEN, message['user'], message['text'], message['image'])
+                send_image_to_user(config.BOT_TOKEN, message['user'], message['text'], message['image'])
             except Exception as e:
                 logging.info(e)
-                send_message_to_user(BOT_TOKEN, message['user'], message['text'])    
+                send_message_to_user(config.BOT_TOKEN, message['user'], message['text'])    
         else:
-            send_message_to_user(BOT_TOKEN, message['user'], message['text'])
+            send_message_to_user(config.BOT_TOKEN, message['user'], message['text'])
 
     logging.info('ok event')
     return 'OK'

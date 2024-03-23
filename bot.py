@@ -14,14 +14,11 @@ from source.bot_tools import *
 import os
 
 MONGODB_URI = os.getenv('MONGODB_URI')
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-HELIUS_KEY = os.getenv('HELIUS_KEY')
-HELIUS_WEBHOOK_URL = os.getenv('HELIUS_WEBHOOK_URL')
 HELIUS_WEBHOOK_ID = os.getenv('HELIUS_WEBHOOK_ID')
 
 
 ADDING_WALLET, DELETING_WALLET = range(2)
-client = MongoClient(MONGODB_URI)
+client = MongoClient(config.MONGODB_URI)
 db = client.sol_wallets
 wallets_collection = db.wallets
 
@@ -154,7 +151,7 @@ def add_wallet_finish(update: Update, context: CallbackContext) -> int:
     else:
         reply_markup = next(update, context)
         # get existing webhook from Helius
-        success, webhook_id, addresses = get_webhook(HELIUS_WEBHOOK_ID)
+        success, webhook_id, addresses = get_webhook(config.HELIUS_WEBHOOK_ID)
         # update existing webhook by adding an address
         r_success = add_webhook(user_id, wallet_address, webhook_id, addresses)
         
@@ -195,7 +192,7 @@ def delete_wallet_finish(update: Update, context: CallbackContext) -> int:
     r_success = True
     if len(list(wallets_exist)) == 1:
         logging.info('deleting unique address')
-        success, webhook_id, addresses = get_webhook(HELIUS_WEBHOOK_ID)
+        success, webhook_id, addresses = get_webhook(config.HELIUS_WEBHOOK_ID)
         r_success = delete_webhook(user_id, wallet_address, webhook_id, addresses)
     else:
         logging.info('address not unique, not deleting')
