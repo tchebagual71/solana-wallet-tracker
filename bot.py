@@ -51,8 +51,6 @@ def start(update: Update, context: CallbackContext) -> None:
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text(welcome_message(), reply_markup=reply_markup)
-
 
     if update.message:
         update.message.reply_text(welcome_message(), reply_markup=reply_markup)
