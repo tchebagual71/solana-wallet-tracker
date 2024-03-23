@@ -189,6 +189,15 @@ app = Flask(__name__)
 def home():
     return 'Welcome to the Solana Wallet Tracker!', 200
 
+@app.route('/testdb')
+def testdb():
+    try:
+        count = db.wallets.count_documents({})
+        return f'Document count in wallets collection: {count}', 200
+    except Exception as e:
+        return f'Error accessing database: {str(e)}', 500
+
+
 @app.route('/wallet', methods=['POST'])
 def handle_webhook():
     # Extract data from incoming request
