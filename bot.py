@@ -2,15 +2,13 @@ import logging
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackQueryHandler
-from telegram.ext import ConversationHandler
-
+from telegram.ext import CallbackQueryHandler, ConversationHandler
 from pymongo import MongoClient
 from datetime import datetime
-
 import source.config as config
 from source.bot_tools import *
 
+# Configuration parameters and MongoDB setup
 MONGODB_URI = 'mongodb+srv://walletwatchr:walletwatchrpassword@cluster0.ehtddne.mongodb.net/'
 BOT_TOKEN = '6502984988:AAEE65Mor8XNvxhb3irkxtR8WqDHcbdinL8'
 HELIUS_KEY = '9e17b24d-b88d-41e2-86e1-0bb6bf5b8095'
@@ -19,58 +17,60 @@ HELIUS_WEBHOOK_ID = '5d8cadd0-ce36-4cb9-8cbc-6dc3d21705f'
 
 ADDING_WALLET, DELETING_WALLET = range(2)
 client = MongoClient(MONGODB_URI)
-db = client.sol_wallets
-wallets_collection = db.wallets
+db = client['sol_wallets']
+wallets_collection = db['wallets']
 
-# Set up logging
-logging.basicConfig(
-    filename='bot.log',
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+# Setup logging
+logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
-    
-# Telegram Bot was created using ChatGPT, so it uses an older library (python-telegram-bot==13.7)
-def welcome_message() -> str:
-    message = (
-        "🤖 Ahoy there, Solana Wallet Wrangler! Welcome to Solana Wallet Xray Bot! 🤖\n\n"
-        "I'm your trusty sidekick, here to help you juggle those wallets and keep an eye on transactions.\n"
-        "Once you've added your wallets, you can sit back and relax, as I'll swoop in with a snappy notification and a brief transaction summary every time your wallet makes a move on Solana. 🚀\n"
-        "Have a blast using the bot! 😄\n\n"
-        "Ready to rumble? Use the commands below and follow the prompts:"
-    )
 
-    return message
+# Define functions used by the bot
+def welcome_message() -> str:
+    return ("🤖 Ahoy there, Solana Wallet Wrangler! Welcome to the Solana Wallet Xray Bot! 🤖\n\n"
+            "I'm your trusty sidekick, here to help you juggle those wallets and keep an eye on transactions. "
+            "Once you've added your wallets, you can sit back and relax, as I'll swoop in with a snappy notification "
+            "and a brief transaction summary every time your wallet makes a move on Solana. 🚀\n"
+            "Have a blast using the bot! 😄\n\n"
+            "Ready to rumble? Use the commands below and follow the prompts:")
 
 def start(update: Update, context: CallbackContext) -> None:
-    keyboard = [
-        [
-            InlineKeyboardButton("✨ Add", callback_data='addWallet'),
-            InlineKeyboardButton("🗑️ Delete", callback_data='deleteWallet'),
-            InlineKeyboardButton("👀 Show", callback_data='showWallets'),
-        ]
-    ]
+    keyboard = [[InlineKeyboardButton("✨ Add", callback_data='addWallet'),
+                 InlineKeyboardButton("🗑️ Delete", callback_data='deleteWallet'),
+                 InlineKeyboardButton("👀 Show", callback_data='showWallets')]]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(welcome_message(), reply_markup=reply_markup)
 
-    if update.message:
-        update.message.reply_text(welcome_message(), reply_markup=reply_markup)
-    else:
-        update.callback_query.edit_message_text("The world is your oyster! Choose an action and let's embark on this thrilling journey! 🌍", reply_markup=reply_markup)
+def next_buttons() -> InlineKeyboardMarkup:
+    keyboard = [[InlineKeyboardButton("✨ Add", callback_data="addWallet"),
+                 InlineKeyboardButton("🗑️ Delete", callback_data="deleteWallet"),
+                 InlineKeyboardButton("👀 Show", callback_data="showWallets")],
+                [InlineKeyboardButton("🔙 Back", callback_data="back")]]
+    return InlineKeyboardMarkup(keyboard)
 
-def next(update: Update, context: CallbackContext) -> None:
-    keyboard = [
-        [
-            InlineKeyboardButton("✨ Add", callback_data="addWallet"),
-            InlineKeyboardButton("🗑️ Delete", callback_data="deleteWallet"),
-            InlineKeyboardButton("👀 Show", callback_data="showWallets"),
-        ],
-        [
-            InlineKeyboardButton("🔙 Back", callback_data="back"),
-        ]
-    ]
+def back_button() -> InlineKeyboardMarkup:
+    keyboard = [[InlineKeyboardButton("🔙 Back", callback_data="back")]]
+    return InlineKeyboardMarkup(keyboard)
 
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    return reply_markup
+def button_callback(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    query.answer()
+    data = query.data
+    if data == "addWallet":
+        query.edit_message_text("Alright, ready to expand your wallet empire? Send me the wallet address you'd like to add! 🎩", reply_markup=back_button())
+        return ADDING_WALLET
+    elif data == "deleteWallet":
+        query.edit_message_text("Time for some spring cleaning? Send the wallet address you'd like to sweep away! 🧹", reply_markup=back_button())
+        return DELETING_WALLET
+    elif data == "showWallets":
+        show_wallets(update, context)
+    elif data == "back":
+        back(update, context)
+
+def back(update: Update, context: CallbackContext) -> int:
+    query = update.callback_query
+    query.answer()
+    start(update, context)  # Assuming 'start' handles the display of the main menu
+    return ConversationHandler.END
 
 def back_button(update: Update, context: CallbackContext) -> None:
     keyboard = [

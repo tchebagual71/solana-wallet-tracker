@@ -40,3 +40,8 @@ General Purpose RPC URL - https://mainnet.helius-rpc.com/?api-key=9e17b24d-b88d-
 Devnet
 Helius Enriched API URL - https://api-devnet.helius.xyz
 General Purpose RPC URL - https://devnet.helius-rpc.com/?api-key=9e17b24d-b88d-41e2-86e1-0bb6bf5b8095
+
+
+git push heroku main
+heroku ps:scale worker=1
+heroku ps:scale web=1
