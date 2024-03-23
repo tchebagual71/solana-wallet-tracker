@@ -10,7 +10,6 @@ HELIUS_WEBHOOK_ID = '5d8cadd0-ce36-4cb9-8cbc-6dc3d21705fc'
 MONGOD_CONNECTION_STRING = 'mongodb+srv://10745308:<326968>@tchebagualcluster.hjhjluv.mongodb.net/'
 MONGOD_API_KEY = 'KJeetviRgGFHpInEWeU7hDA1W44E1WOKj8TaZfOLD5IWfb39Pw9y8zKj86TxDWNE'
 
-ppop
 User
 my helius webhook info is
 
