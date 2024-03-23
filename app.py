@@ -15,9 +15,14 @@ import requests
 
 from pymongo import MongoClient
 
-MONGODB_URI = config.MONGODB_URI
-BOT_TOKEN = config.BOT_TOKEN
-HELIUS_KEY = config.HELIUS_KEY
+import os
+
+MONGODB_URI = os.getenv('MONGODB_URI')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+HELIUS_KEY = os.getenv('HELIUS_KEY')
+HELIUS_WEBHOOK_URL = os.getenv('HELIUS_WEBHOOK_URL')
+HELIUS_WEBHOOK_ID = os.getenv('HELIUS_WEBHOOK_ID')
+
 
 client = MongoClient(MONGODB_URI)
 db = client.sol_wallets

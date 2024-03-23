@@ -3,6 +3,7 @@ import requests
 from datetime import datetime
 import source.config as config
 import logging
+import os
 
 from datetime import datetime
 
@@ -14,12 +15,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-MONGODB_URI = config.MONGODB_URI
-BOT_TOKEN = config.BOT_TOKEN
-TOKEN = BOT_TOKEN
-HELIUS_KEY = config.HELIUS_KEY
-HELIUS_WEBHOOK_URL = config.HELIUS_WEBHOOK_URL
-HELIUS_WEBHOOK_ID = config.HELIUS_WEBHOOK_ID
+
+
+MONGODB_URI = os.getenv('MONGODB_URI')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+HELIUS_KEY = os.getenv('HELIUS_KEY')
+HELIUS_WEBHOOK_URL = os.getenv('HELIUS_WEBHOOK_URL')
+HELIUS_WEBHOOK_ID = os.getenv('HELIUS_WEBHOOK_ID')
 
 client = MongoClient(MONGODB_URI)
 db = client.sol_wallets
