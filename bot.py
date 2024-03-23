@@ -10,6 +10,7 @@ from datetime import datetime
 
 import source.config as config
 from source.bot_tools import *
+from source import config
 
 MONGODB_URI = config.MONGODB_URI
 BOT_TOKEN = config.BOT_TOKEN

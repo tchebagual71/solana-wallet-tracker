@@ -15,6 +15,7 @@ from datetime import datetime
 import requests
 
 from pymongo import MongoClient
+from source import config
 
 MONGODB_URI = config.MONGODB_URI
 BOT_TOKEN = config.BOT_TOKEN
