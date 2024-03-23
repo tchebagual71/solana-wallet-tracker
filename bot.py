@@ -46,14 +46,14 @@ def welcome_message() -> str:
 def start(update: Update, context: CallbackContext) -> None:
     keyboard = [
         [
-            InlineKeyboardButton("✨ Add", callback_data="addWallet"),
-            InlineKeyboardButton("🗑️ Delete", callback_data="deleteWallet"),
-            InlineKeyboardButton("👀 Show", callback_data="showWallets"),
-
+            InlineKeyboardButton("✨ Add", callback_data='addWallet'),
+            InlineKeyboardButton("🗑️ Delete", callback_data='deleteWallet'),
+            InlineKeyboardButton("👀 Show", callback_data='showWallets'),
         ]
     ]
-
     reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(welcome_message(), reply_markup=reply_markup)
+
 
     if update.message:
         update.message.reply_text(welcome_message(), reply_markup=reply_markup)
