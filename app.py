@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request
 
 # Telegram Bot was created using ChatGPT, so it uses an older library (python-telegram-bot==13.7)
@@ -216,4 +217,5 @@ def handle_webhook():
     return 'OK'
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5002)
+    port = int(os.environ.get('PORT', 5000))  # Default to 5000 if PORT not set
+    app.run(debug=False, host='0.0.0.0', port=port)

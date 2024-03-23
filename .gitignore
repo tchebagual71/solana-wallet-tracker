@@ -6,3 +6,4 @@ wallet.log
 .DS_Store
 keys.txt
 example.txt
+.env
